@@ -1,0 +1,136 @@
+#:kivy 1.7.0
+
+<-FullImage>:
+    canvas:
+        Rectangle:
+            texture: self.texture
+            size: self.width, self.height
+            pos: self.x, self.y
+
+<WeekLabel>:
+    day: app.day
+    
+<TimeSettingButton>:
+    size_hint: None, None
+    size: (400, 50)
+
+<RotatingImage>:
+    size_hint: None, None
+    allow_stretch: True
+
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: root.angle
+            axis: 0, 0, 1
+            origin: root.center
+    canvas.after:
+        PopMatrix
+
+<ClockLayout>:
+    size_hint: 1, 1
+
+    FullImage:
+        id: bg
+        size_hint: 1, 1
+        allow_stretch: True
+        keep_ratio: True
+
+    FullImage:
+        id: moon
+        size_hint: 1, 1
+        allow_stretch: True
+        keep_ratio: True
+
+    FloatLayout:
+        id: clock
+        size_hint: None, None
+        size: (root.height, root.height)
+        pos: (0,0)
+
+        on_touch_down:
+            app.say_time(*args)
+
+        Image:
+            id: frame
+            size_hint: 1, 1
+            allow_stretch: True
+
+        Image:
+            id: hour
+            size_hint: 1, 1
+            allow_stretch: True
+
+            canvas.before:
+                PushMatrix
+                Rotate:
+                    angle: app.hours_needle_angle
+                    axis: 0, 0, 1
+                    origin: self.center
+
+            canvas.after:
+                PopMatrix
+
+        Image:
+            id: minute
+            size_hint: 1, 1
+            allow_stretch: True
+
+            canvas.before:
+                PushMatrix
+                Rotate:
+                    angle: app.minutes_needle_angle
+                    axis: 0, 0, 1
+                    origin: self.center
+
+            canvas.after:
+                PopMatrix
+
+        Image:
+            id: second
+            size_hint: 1, 1
+            allow_stretch: True
+
+            canvas.before:
+                PushMatrix
+                Rotate:
+                    angle: app.seconds_needle_angle
+                    axis: 0, 0, 1
+                    origin: self.center
+
+            canvas.after:
+                PopMatrix
+
+    DragArea:
+        id: drag_area
+        color: 1,1,1,1
+        size: (root.width*0.4, root.height*0.9)
+        pos: (root.width - self.width, root.height - self.height)
+        size_hint: None, None
+
+    WeekLabel:
+        id: week
+        color: 1, 0.9, 1, 0.9
+        bold: True
+        font_size: root.width/30
+        text: "Ma Ti Ke To Pe La Su"
+        size: (root.width/3, root.width/20)
+        size_hint: None, None
+        pos: (root.width - self.width, 0)
+
+        canvas.before:
+            Color:
+                rgba: 0.5,0.4,0.5,0.5
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        canvas.after:
+            Color:
+                rgba: 1,0.6,0.6,0.5
+            Rectangle:
+                pos:(self.x + self.day*(self.width/7), self.y)
+                size:(self.width/7*1.1, self.height)
+
+        on_touch_down:
+            app.say_day(*args)
