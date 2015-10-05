@@ -1,21 +1,30 @@
+#!/usr/bin/env python
+"""This script defines settings functions for Ensikello application"""
+
+
 def build_config(config):
+    """defining this function causes the application to create
+    an .ini file, with the default settings listed below."""
+
     config.setdefaults(
         'day', {
             'background': 'bratzillas_cloetta_spelletta_1.png',
             'clock_visible': 1,
-            'audio_enabled' : 1
+            'audio_enabled': 1
         })
     config.setdefaults(
-        'night' , {
+        'night', {
             'background': 'bratzillas_cloetta_spelletta_2.png',
             'start_time': '20:30',
             'stop_time': '8:30',
             'clock_visible': 1,
             'moon_visible': 1,
-            'audio_enabled' : 1
+            'audio_enabled': 1
         })
 
+
 def build_settings(settings, config, backgrounds):
+    """Extends application settings with own panels"""
 
     # setting types: title, bool, numeric, options, string, path
     jsondata = '''
@@ -86,9 +95,9 @@ def build_settings(settings, config, backgrounds):
 '''
     backgrounds_string = "["
     for background in sorted(backgrounds):
-        backgrounds_string += "\"%s\","%background
+        backgrounds_string += "\"%s\"," % background
     backgrounds_string = backgrounds_string.rsplit(',', 1)[0]
     backgrounds_string += "]"
     jsondata = jsondata.replace("<!--backgrounds-->", backgrounds_string)
     settings.add_json_panel('Ensikello',
-        config, None, jsondata)
+                            config, None, jsondata)
